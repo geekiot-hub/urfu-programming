@@ -1,6 +1,5 @@
 from typing import Union
 
-
 FROM_ROMAN_NUMBERS = {
     "I": 1,
     "IV": 4,

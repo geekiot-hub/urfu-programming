@@ -1,9 +1,9 @@
 from random import choice
 from string import (
+    ascii_lowercase,
+    ascii_uppercase,
     digits,
     punctuation,
-    ascii_uppercase,
-    ascii_lowercase,
 )
 
 

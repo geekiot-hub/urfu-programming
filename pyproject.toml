@@ -1,5 +1,5 @@
 [project]
-name = "urfu_inf"
+name = "urfu_programming"
 version = "0.1.0"
 description = ""
 readme = "README.md"
@@ -11,7 +11,33 @@ dependencies = [
     "numpy>=2.3.3",
     "pandas>=2.3.2",
     "pip>=25.2",
+    "ruff>=0.14.0",
     "scikit-learn>=1.7.2",
     "scipy>=1.16.2",
 ]
 
+[tool.ruff]
+target-version = "py313"
+exclude = [
+    ".git/",
+    ".venv/",
+    "vscode",
+    ".ruff_cache/",
+]
+line-length = 70
+indent-width = 4
+
+[tool.ruff.lint]
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+select = ["E", "F", "N", "I", "C90", "T", "S"]
+ignore = ["T201", "S311", "S605", "S607", "C901"]
+
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

@@ -1,7 +1,6 @@
 import os
 from random import choice
 
-
 # Встроенные слова для игры
 STANDART_WORDS = [
     "банан",
@@ -250,7 +249,7 @@ def main():
         print("Ваш словарь пуст! Запустите программу заново!!!")
         exit()
 
-    print(f"Ваш словарь: {", ".join(words)}" + ".")
+    print(f"Ваш словарь: {', '.join(words)}" + ".")
     print("\n" + MESSAGES["commands_info"])
 
     input("Нажмите ENTER, чтобы продолжить...")
