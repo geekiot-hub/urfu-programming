@@ -2,57 +2,80 @@ import datetime
 from decimal import Decimal
 
 
-def add(items, title, amount, expiration_date=None):
+# Создаем холодильник
+# Который представляет собой словарь,
+# Ключи - названия продуктов
+# А значения - ревизии этих продуктов
+#   с указанием их веса и даты окончания срока годности (опционально)
+def add(
+    fridge: dict,
+    title: str,
+    amount: int | str,
+    expiration_date=None,
+) -> dict:
+    """Функция для добавления ревизии в холодильник"""
+    # Получаем информацию о дате окончания срока годности
     date = (
         None
         if expiration_date is None
         else datetime.date(*map(int, expiration_date.split("-")))
     )
 
-    if items.get(title) is None:
-        items[title] = []
+    # Создаем список ревизий при его отсутствии
+    if fridge.get(title) is None:
+        fridge[title] = []
 
-    items[title].append(
+    # Добавляем ревизию
+    fridge[title].append(
         {
             "amount": Decimal(amount),
             "expiration_date": date,
         }
     )
 
-    return items
+    # Возвращаем измененный холодильник
+    return fridge
 
 
-def add_by_note(items, note):
+def add_by_note(fridge: dict, note: str) -> str:
+    """
+    Добавляем ревизию продукта в холодильник из заметки вида:
+    <название продукта> <кол-во> <дата-окончания-срока-годности>
+    """
+    # Получаем список данных из заметки
     data = note.split()
 
+    # Рассматриваем отдельно заметки с и без срока годности
     if "-" in data[-1]:
         date = data[-1]
         amount = data[-2]
         title = " ".join(data[:-2])
     else:
         date = None
-        amount = float(data[1])
-        title = data[0]
+        amount = data[-1]
+        title = " ".join(data[:-1])
 
-    return add(items, title, amount, date)
+    return add(fridge, title, amount, date)
 
 
-def find(items, needle):
-    keys = list()
+def find(fridge: dict, needle: str) -> list[str]:
+    """Поиск всех продуктов по подстроке"""
+    titles = list()
     needle = needle.lower()
 
-    for good_name in items.keys():
-        if needle in good_name.lower():
-            keys.append(good_name)
+    for title in fridge.keys():
+        if needle in title.lower():
+            titles.append(title)
 
-    return keys
+    return titles
 
 
-def amount(items, needle):
-    keys = find(items, needle)
-    cnt = 0
+def amount(fridge: dict, needle: str) -> Decimal:
+    """Подсчет веса всех продуктов содержащих подстроку"""
+    titles = find(fridge, needle)
+    amounts = 0
 
-    for key in keys:
-        cnt += sum([good["amount"] for good in items[key]])
+    for title in titles:
+        amounts += sum([good["amount"] for good in fridge[title]])
 
-    return Decimal(cnt)
+    return Decimal(amounts)
