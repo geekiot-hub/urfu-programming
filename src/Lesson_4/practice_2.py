@@ -1,5 +1,11 @@
 class Transport:
-    """Родительский класс для видов транспорта"""
+    """
+    Родительский класс для видов транспорта
+
+    Attrs:
+        weight (int): вес транспорта
+        name (str): название транспорта
+    """
 
     def __init__(self, weight: int, name: str):
         """Инициализация транспорта
@@ -21,8 +27,14 @@ class Transport:
 
 
 class Car(Transport):
-    """Класс для объектов типа Машина.
+    """
+    Класс для объектов типа Машина.
     Наследован от Transport.
+
+    Attrs:
+        weight (int): вес машины.
+        name (str): марка машины.
+        price (int): цена машины.
     """
 
     def __init__(self, weight: int, name: str, price: int):
@@ -46,8 +58,14 @@ class Car(Transport):
 
 
 class Skate(Transport):
-    """Класс для объектов типа Skate.
+    """
+    Класс для объектов типа Skate.
     Наследован от Transport.
+
+    Attrs:
+        weight (int): вес скейта.
+        name (str): название скейта.
+        price (int): цена скейта.
     """
 
     def __init__(self, weight: int, name: str, price: int):
@@ -71,8 +89,14 @@ class Skate(Transport):
 
 
 class Chair(Transport):
-    """Класс для объектов типа Chair.
+    """
+    Класс для объектов типа Chair.
     Наследован от Transport.
+
+    Attrs:
+        weight (int): вес кресла.
+        name (str): название кресла.
+        price (int): цена кресла.
     """
 
     def __init__(self, weight: int, name: str, price: int):

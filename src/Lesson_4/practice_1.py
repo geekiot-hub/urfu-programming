@@ -1,10 +1,16 @@
 class Employee:
-    """Сотрудник Великой Компании"""
+    """
+    Сотрудник Великой Организации
+
+    Attrs:
+        has_2_hands (bool): качественно ли выполняет работу
+        expirience (int): опыт работы в компании (в годах)
+    """
 
     def __init__(self, has_2_hands: bool, expirience: int):
         """Инициализация сотрудника
 
-        args:
+        Args:
             has_2_hands (bool): качественно ли выполняет работу
             expirience (int): опыт работы в компании (в годах)
         """
@@ -25,9 +31,13 @@ class Employee:
 
 
 class Manager(Employee):
-    """Менеджер Великой Компании
-
+    """
+    Менеджер Великой Компании
     Наследование от класса Employee
+
+    Attrs:
+        has_2_hands (bool): качественно ли выполняет работу
+        expirience (int): опыт работы в компании (в годах)
     """
 
     def __init__(self, has_2_hands: bool, expirience: int):
@@ -50,9 +60,15 @@ class Manager(Employee):
 
 
 class Developer(Employee):
-    """Разработчик Великой Компании
-
+    """
+    Разработчик Великой Компании
     Наследование от класса Employee
+
+    Attrs:
+        has_2_hands (bool): качественно ли выполняет работу
+        expirience (int): опыт работы в компании (в годах)
+        love_python (bool, optional): нравится ли python.
+        по умолчанию False
     """
 
     def __init__(
