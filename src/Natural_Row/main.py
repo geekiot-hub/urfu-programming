@@ -18,4 +18,4 @@ def fast_get_digit(n):
     return str(number)[index]
 
 
-print(fast_get_digit(eval(input("Введите степень n: "))))
+print(fast_get_digit(eval(input("Введите n: "))))
