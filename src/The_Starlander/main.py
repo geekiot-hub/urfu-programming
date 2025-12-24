@@ -1,8 +1,7 @@
 import random
 import sys
-from time import sleep
-
 from pathlib import Path
+from time import sleep
 
 import pygame
 
@@ -494,6 +493,7 @@ def game_loop():
 
         # Check for power-up expiration
         current_time = pygame.time.get_ticks()
+        # print(current_time, player1.powerup_end_time)
         if current_time > player1.powerup_end_time:
             player1.double_shot = False
             player1.invincible_bullets = False
