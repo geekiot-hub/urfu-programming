@@ -24,8 +24,15 @@ def is_almost_lucky(ticket_number: str) -> bool:
     # However, ticket number 0 has no neighbor on the left and is unlucky.
     # A ticket with number 999_999 has no neighbor on the right and is unlucky.
     # Therefore, a ticket with number n is unlucky if n < 1 or n > 999_999.
+    if not ticket_number.isdigit() or len(ticket_number) != 6:
+        raise ValueError("Ticket numbers can range from (0, 999_999)")
+
     ticket_number: int = int(ticket_number)
-    if ticket_number < 1 or ticket_number > 999_999:
+
+    if ticket_number < 0 or ticket_number > 999_999:
+        raise ValueError("Ticket numbers can range from (0, 999_999)")
+
+    if ticket_number == 0:
         return False
 
     def check_lucky(num: int) -> bool:

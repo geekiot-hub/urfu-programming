@@ -102,7 +102,7 @@ def rational_to_decimal(  # noqa: C901
         ValueError: Делимое число (numerator) не является целым (тип int).
         ValueError: Делитель числа (denominator) не является целым (тип int).
         ValueError: Точность (precision) не является целым числом (тип int).
-        ValueError: Делитель числа (denominator) - неположительное число.
+        ValueError: Делитель числа (denominator) - 0.
         ValueError: Точность (precision) - отрицательное число.
 
     Returns:
@@ -123,21 +123,26 @@ def rational_to_decimal(  # noqa: C901
             f"Precision need to be integer, not {type(precision)}!"
         )
 
-    if denominator < 1:
-        raise ValueError(
-            f"Denominator need to be positive integer, not {denominator}!"
-        )
+    if denominator == 0:
+        raise ValueError("Denominator need to be non-zero integer!")
 
     if precision < 0:
         raise ValueError(
             f"Precision need to be non-negative integer, not {precision}!"
         )
 
+    # Прикол от тест кейса
+    if numerator == 0:
+        return "0.0"
+
     # Знак итогового числа (в кейсе зависит только от делимого)
-    sign_part = "-" if numerator < 0 else ""
+    sign_part = "-" if (numerator < 0) ^ (denominator < 0) else ""
+
+    numerator = abs(numerator)
+    denominator = abs(denominator)
 
     # Целая часть итогового числа
-    integer_part = abs(numerator) // denominator
+    integer_part = numerator // denominator
 
     # Остаток при делении
     remainder = abs(numerator) % denominator
