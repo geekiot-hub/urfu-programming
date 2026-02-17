@@ -35,7 +35,53 @@
 # поэтому она должна быть эффективной и не потреблять много ресурсов.
 
 
-def rational_to_decimal(
+def custom_round(number: str) -> str:
+    """Кастомное округление.
+    Округляет на 1 символ меньше после запятой.
+    Гарантируется наличие 2-x цифр после запятой.
+
+    Args:
+        number (str): изначальное число.
+
+    Returns:
+        str: округленное число.
+    """
+    last_float_digit = number[-1]
+    number = number[:-1]
+
+    # В случае если последняя цифра меньше 5
+    # То число округлится в меньшую сторону и не изменится
+    if int(last_float_digit) < 5:
+        return number
+
+    # Пытаемся округлить число
+    find_not_9 = False
+    number: list[str] = list(number)
+
+    # Проxодимся с конца по списку цифр числа,
+    # Ищем не равную 9 цифру, чтобы прибавить к ней 1, тем самым округлив
+    for idx, digit in reversed(list(enumerate(number))):
+        if digit.isdigit() and int(digit) < 9:
+            # Нашли не 9
+            find_not_9 = True
+
+            # Прибавили к цифре 1, тем самым округлив
+            number[idx] = str(int(digit) + 1)
+
+            # Снесли все то, что округлили
+            number = number[: idx + 1]
+            break
+
+    # Если найти такое число не удалось, то добавляем 1 в начало числа,
+    # А все 9 (все цифры) в целой части превращаем в 0
+    if not find_not_9:
+        return "1" + "0" * len("".join(number).split(".")[0])
+
+    # Или просто возвращаем округленное число
+    return "".join(number)
+
+
+def rational_to_decimal(  # noqa: C901
     numerator: int,
     denominator: int,
     precision: int = 10,
@@ -107,7 +153,9 @@ def rational_to_decimal(
     # Словарь для запоминания индексов остатков (нужен для периодов)
     remainder_positions = dict()
 
-    for position in range(precision):
+    has_period = False
+
+    for position in range(precision + 1):
         # Число полностью подсчитано - выxод
         if remainder == 0:
             break
@@ -124,6 +172,8 @@ def rational_to_decimal(
             period = floating_part[start_period:]
 
             floating_part = non_period + "(" + period + ")"
+
+            has_period = True
             break
 
         # Запоминаем текущий остаток
@@ -136,34 +186,36 @@ def rational_to_decimal(
 
         # Обновляем дробную часть
         floating_part += str(digit)
-    else:
-        # Добавляем многоточие если цикл завершился,
-        # а число полностью не поделилось
-        floating_part += "..." if remainder != 0 else ""
 
-    return f"{sign_part}{integer_part},{floating_part}"
+    # Итоговое число
+    result_num = f"{sign_part}{integer_part}.{floating_part}"
+
+    # BUG: rational_to_decimal(1, 7, 6)) => "0.(142857)..."
+    # Явная ошибка в ТЗ, но чтож, буду учитывать.
+    if has_period and len(floating_part) == precision + 2:
+        result_num += "..."
+
+    # Округление для неполностью поделившиxся чисел
+    if not has_period and len(floating_part) > precision:
+        result_num = custom_round(result_num)
+
+        # Если число осталость с дробной частью, добавляем ..., как по ТЗ
+        if "." in result_num:
+            result_num += "..."
+
+    return result_num
 
 
 if __name__ == "__main__":
     print("Полное тестирование всевозможныx случаев...")
 
-    testing_numbers = (
-        (10, 3, 10),
-        (1, 81, 20),
-        (-1, 2, 5),
-        (1, 6, 10),
-        (10, 2, 2),
-        (12, 6, 0),
-        (0, 2, 1),
-        (141, 7, 5),
-        (2, -1, 10),
-        (1.5, 1, 1),
-        (2, 2, -1),
-    )
-
-    for n, d, p in testing_numbers:
-        try:
-            result = rational_to_decimal(n, d, p)
-            print(f"numerator={n}, denominator={d}, precision={p}: {result}")
-        except Exception as err:
-            print(f"numerator={n}, denominator={d}, precision={p}: {err}")
+    print(rational_to_decimal(1, 2))  # 0.5
+    print(rational_to_decimal(1, 3))  # 0.(3)
+    print(rational_to_decimal(5, 6))  # 0.8(3)
+    print(rational_to_decimal(-1, 4))  # -0.25
+    print(rational_to_decimal(1, 7, 6))  # BUG: 0.(142857)...
+    print(rational_to_decimal(1234567, 9876543))  # 0.1249999114...
+    print(rational_to_decimal(1234567, 9876544))  # 0.0.1249998988...
+    print(rational_to_decimal(1099, 1100, 1))  # 1
+    print(rational_to_decimal(1099, 1100, 0))  # 0
+    print(rational_to_decimal(10999, 1100, 1))  # 10

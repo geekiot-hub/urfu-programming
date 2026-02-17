@@ -11,11 +11,11 @@
 # следующий билет счастливый, и False в противном случае.
 
 
-def check_neighbor_lucky(ticket_num: int) -> bool:
+def is_almost_lucky(ticket_number: str) -> bool:
     """Checking whether the neighboring ticket is a "lucky ticket".
 
     Args:
-        ticket_num (int): ticket number to check.
+        ticket_number (int): ticket number to check.
 
     Returns:
         bool: is the neighboring ticket a "lucky ticket".
@@ -24,7 +24,8 @@ def check_neighbor_lucky(ticket_num: int) -> bool:
     # However, ticket number 0 has no neighbor on the left and is unlucky.
     # A ticket with number 999_999 has no neighbor on the right and is unlucky.
     # Therefore, a ticket with number n is unlucky if n < 1 or n > 999_999.
-    if ticket_num < 1 or ticket_num > 999_999:
+    ticket_number: int = int(ticket_number)
+    if ticket_number < 1 or ticket_number > 999_999:
         return False
 
     def check_lucky(num: int) -> bool:
@@ -43,10 +44,10 @@ def check_neighbor_lucky(ticket_num: int) -> bool:
 
         return left_sum == right_sum
 
-    return check_lucky(ticket_num - 1) or check_lucky(ticket_num + 1)
+    return check_lucky(ticket_number - 1) or check_lucky(ticket_number + 1)
 
 
 # Start verification...
 if __name__ == "__main__":
-    for ticket_num in range(0, 999_999 + 1):
-        print(ticket_num, check_neighbor_lucky(ticket_num))
+    for ticket_number in range(0, 999_999 + 1):
+        print(ticket_number, is_almost_lucky(str(ticket_number)))
